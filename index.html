@@ -1,25 +1,35 @@
 <!DOCTYPE html>
-<html ng-app='CounterApp'>
+<html ng-app='ShoppingListCheckOff'>
 <head>
 	<meta charset="utf-8">
 	<script src="angular.min.js"></script>
 	<script src="app.js"></script>
-	<title>ng-repeat</title>
-</head>
-<body>
-	<h1>the Digest Cycle</h1>
-	<div ng-controller='CounterController'>
-		<button ng-click="showNumberOfWatchers()">log # of Watchers</button>
-		<div>
-		<input type="text" ng-model="name">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<title>shopping list checkoff</title>
+	<style type="text/css">
 		
-			<button ng-click="countOnce()">up Once Counter (once)</button>
-			<button ng-click="upCounter()">up increment counter </button>
-		</div>
-		<div>
-			once counter: {{onceCounter}}<br>
-			Regular Counter:{{counter}}
-		</div>
+	</style>
+</head>
+<body class="row">
+	<h2 class="page-header">&nbsp check off shopping list</h2>
+	<div ng-controller="ToBuyController as buy" class="col-md-6">
+		<h3>to Buy</h3>
+		<div ng-if="buy.full">Already Bought</div>
+		<ol>
+			<li ng-repeat="item in buy.products" class="row"><p class="col-md-4">buy {{item.quantity}} {{item.name}}</p><button ng-click="buy.purchase($index);" class="col-md-4 btn btn-default">bought</button>
+			</li>
+		</ol>
+
+			<div ng-if="buy.full2;">Nothing bought yet</div>
 	</div>
-</body>
+	
+		
+		<div ng-controller="AlreadyBoughtController as bought" class="col-md-6">
+		<h3>Already Bought</h3>
+		<ol>
+			<li ng-repeat="ite in bought.buyproducts">
+				Bought {{ite.quantity}} {{ite.name}}
+			</li>
+		</ol>
+	</div>
 </html>

@@ -1,39 +1,68 @@
 (function(){
 
 	'use strict';
-	angular.module('CounterApp',[])
-	.controller('CounterController',CounterController);
 
-	CounterController.$inject=['$scope'];
-	function CounterController($scope){
-		$scope.onceCounter=0;
-		$scope.
-counter=0;
-		$scope.name="dilip";
-		
-		$scope.showNumberOfWatchers=function(){
-			console.log("# of watchers:",$scope.$$watchersCount);
+	angular.module('ShoppingListCheckOff',[])
+	.controller('ToBuyController',ToBuyController)
+	.controller('AlreadyBoughtController',AlreadyBoughtController)
+	.service('ShoppingListCheckOffService',ShoppingListCheckOffService);
+
+	ToBuyController.$inject=['ShoppingListCheckOffService'];
+	function ToBuyController(ShoppingListCheckOffService){
+		var buy=this;
+		buy.full=false;
+		buy.full2=true;
+		 buy.products=ShoppingListCheckOffService.getItem();
+		 buy.purchase=function(loc){
+
+		 var item=ShoppingListCheckOffService.remove(loc);
+		 ShoppingListCheckOffService.add(item);
+		 if(buy.products.length==0)
+		 	buy.full=true;
+		 	buy.full2=false;
+		 };
+	}
+	
+	AlreadyBoughtController.$inject=['ShoppingListCheckOffService'];
+	function AlreadyBoughtController(ShoppingListCheckOffService){
+		var bought=this;
+
+		 bought.buyproducts=ShoppingListCheckOffService.getItem2();
+		 
+	}
+
+	function ShoppingListCheckOffService(){
+		var service=this;
+		var buyproduct=[];
+		var product=[
+						{name:"cookie", quantity:"10"},
+						{name:"biscuits", quantity:"20"},
+						{name:"strawberry", quantity:"20"},
+						{name:"mango", quantity:"20"},
+						{name:"banana", quantity:"20"}
+
+					];
+
+		service.getItem=function(){
+			
+			return product;
 		};
+		 service.getItem2=function(){
+		 	return buyproduct;
+	 	};
 
-		$scope.countOnce=function(){
-			$scope.onceCounter=1;
-		};
+	 	service.remove=function(location){
+	 		var item={name:product[location].name,
+	 					quantity:product[location].quantity
+	 					};
+	 		 product.splice(location,1);
+	 		 return item;
+	 	};
 
-		$scope.upCounter=function(){
-			$scope.counter++;
-		};
-		$scope.$watch(function(){
-			console.log("Digest loop fired!");
-		})
-		// $scope.$watch('onceCounter',function(newValue,oldValue){
-		// 	console.log("once counter old value:",oldValue);
-		// 	console.log("once counter new value:",newValue);
-		// });
-
-		// $scope.$watch('counter',function(newValue,oldValue){
-		// 	console.log("counter old value:",oldValue);
-		// 	console.log("counternew value:",newValue);
-		// });
+	 	service.add=function(it){
+	 	//	service.indicator=true;
+	 		return buyproduct.push(it);
+	 	};
 	}
 
 })();
